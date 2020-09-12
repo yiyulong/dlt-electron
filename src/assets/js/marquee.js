@@ -29,6 +29,7 @@ export default class Marquee {
     let totalClones = 0
     childrensDom.forEach((target, index) => {
       if (index < fitInNumber) {
+        // 深度克隆: 克隆节点以及所有子节点
         const clone = target.cloneNode(true)
         clone.classList.add('clone')
         this.container.appendChild(clone)

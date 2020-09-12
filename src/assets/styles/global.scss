@@ -3,6 +3,11 @@
 }
 
 body {
+  overflow: hidden;
   background: #eee;
   margin: 0;
+}
+
+img {
+  border: 1px solid rgba($color: #e8c664, $alpha: .6);
 }

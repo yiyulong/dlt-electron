@@ -18,19 +18,22 @@ export default {
   data () {
     return {
       playerOptions: {
-        height: '360',
         autoplay: true,
-        muted: true,
-        language: 'en',
+        muted: false,
+        language: 'zh-CN',
         playbackRates: [0.7, 1.0, 1.5, 2.0],
         // aspectRatio: '4:3',
+        fluid: true,
         preload: 'auto',
+        loop: true,
         sources: [{
           type: 'video/mp4',
           // mp4
           // src: 'http://vjs.zencdn.net/v/oceans.mp4'
           // webm
           src: 'https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm'
+          // src: 'https://cloud.video.taobao.com/play/u/839895996/p/1/e/6/t/1/270847207202.mp4'
+          // src: 'http://bsy.izuiyou.com/zyvd/b1/eb/19fd-9d8f-11e9-9746-00163e042306'
         }],
         poster: 'https://surmon-china.github.io/vue-quill-editor/static/images/surmon-1.jpg',
         controlBar: false
@@ -41,6 +44,15 @@ export default {
     player () {
       return this.$refs.videoPlayer.player
     }
+  },
+  activated () {
+    if (this.player) {
+      this.player.paused() && this.player.play()
+    }
+  },
+  deactivated () {
+    // console.log(this.player)
+    this.player.pause()
   }
 }
 </script>

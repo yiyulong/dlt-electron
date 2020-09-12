@@ -1,7 +1,7 @@
 <template>
   <div class="home-page">
-    <div class="video-container">
-      <video-player></video-player>
+    <div class="video-container" :style="videoContainer_height">
+      <video-player />
     </div>
     <div class="pdt-container">
        <section class="cylinder-container">
@@ -29,9 +29,14 @@ export default {
     return {
     }
   },
+  computed: {
+    videoContainer_height () {
+      return 'height:' + (document.documentElement.clientHeight * 16 / 9) + 'px'
+    }
+  },
   methods: {
     jump () {
-      this.$router.push({ name: 'List' })
+      this.$router.replace({ name: 'List' })
     }
   }
 }
@@ -40,9 +45,9 @@ export default {
 .home-page {
   height: 100%;
   position: relative;;
-  .video-container {
-    height: 29%;
-  }
+  // .video-container {
+  //   height: 29%;
+  // }
   .pdt-container {
     overflow: hidden;
     height: 71%;
@@ -86,6 +91,9 @@ export default {
         .row .span:nth-child(#{$i}) {
           transform: rotateY(#{$i * $deg}deg) translateZ(150px);
         }
+        .row:nth-child(even) .span:nth-child(#{$i}) {
+          transform: rotateY(#{$i * $deg + 15}deg) translateZ(150px);
+        }
       }
     }
   }
@@ -99,6 +107,7 @@ export default {
     flex-flow: row nowrap;
     align-items: center;
     justify-content: center;
+    z-index: 1;
     .tip-touch {
       width: 60px;
       height: 60px;

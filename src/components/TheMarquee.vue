@@ -1,8 +1,9 @@
 <template>
   <div class="marquee-component">
+    <!-- @click.stop="tragetEven" -->
     <ul ref="marquee" class="marquee">
       <li v-for="n of 6" :key="n">
-        <img :src="`./images/${n}.png`" :class="randomNum === n && 'rotate'" @click.stop="detail(n)">
+        <img :data-id="n" :src="`./images/${n}.png`" :class="randomNum === n && 'rotate'">
       </li>
     </ul>
   </div>
@@ -30,6 +31,7 @@ export default {
       this.marquee = new Marquee(this.$refs.marquee, this.direction)
       this.hammer = new Hammer(this.$refs.marquee)
 
+      this.hammer.on('tap', this.tragetEven)
       // this.hammer.on('tap', (e) => {
       //   console.log(e)
       //   e.preventDefault()
@@ -43,10 +45,12 @@ export default {
         // e.srcEvent.stopPropagation()
         const { deltaX, type } = e
         if (type === 'panstart') {
+          this.$emit('panstart')
           this.marquee.stop()
           this.currentTranslateX = this.marquee.getCurrentTranslateX()
         }
         if (type === 'panmove') {
+          this.$emit('panmove')
           this.marquee.stop()
           let translateX = deltaX + this.currentTranslateX
           this.marquee.moveMax().then(res => {
@@ -59,6 +63,7 @@ export default {
             }
           })
         } else {
+          this.$emit('continueTimmer')
           this.marquee.play()
         }
       })
@@ -73,8 +78,14 @@ export default {
     }
   },
   methods: {
-    detail (n) {
-      this.$emit('itemClick', n)
+    tragetEven (e) {
+      console.log(e, e.target.tagName)
+      const tagName = e.target.tagName
+      if (tagName.toLowerCase() === 'img') {
+        const { id } = e.target.dataset
+        // console.log(id)
+        this.$emit('itemClick', id)
+      }
     }
   }
 }

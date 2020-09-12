@@ -4,7 +4,7 @@
       enter-active-class="animate__animated animate__zoomIn animate__fadeIn"
       leave-active-class="animate__animated animate__zoomOut animate__fadeOut"
     >
-      <keep-alive>
+      <keep-alive include="About,Home,List">
         <router-view class="router-container" />
       </keep-alive>
     </transition>
@@ -24,8 +24,7 @@ export default {
   text-align: center;
   color: #2c3e50;
 
-  width: 400px;
-  height: 800px;
+  height: 100%;
   margin: auto;
   background: #000;
 
