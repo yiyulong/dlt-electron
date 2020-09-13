@@ -1,18 +1,18 @@
 <template>
   <!-- @click="initTimmer" -->
-  <div class="list-page">
-    <section v-for="n of 9" :key="n">
-      <the-marquee :direction="n%2 ? 'left' : 'right'" @itemClick="getDetail" @panstart="cancelTimmer" @panmove="cancelTimmer" @continueTimmer="initTimmer" />
+  <div class="list-page" :style="'background-image: url('+$store.state.PRODUCT_LIST_BACKGROUD_PICTURE || ''+')'">
+    <section v-for="(itemArr, index) of list" :key="index">
+      <the-marquee :list="itemArr" :direction="index%2 ? 'left' : 'right'" @itemClick="getDetail" @panstart="cancelTimmer" @panmove="cancelTimmer" @continueTimmer="initTimmer" />
     </section>
     <aside v-if="toggle" @click.self="closeDetail">
       <div class="details animate__animated animate__zoomIn">
-        <div class="img-box"><img :src="`./images/${detailNum}.png`"></div>
-        <div class="desc-box">
+        <div class="img-box"><img :src="detailItem.detailPicUrl"></div>
+        <!-- <div class="desc-box">
           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Debitis cum quae culpa sequi laudantium beatae praesentium commodi vel nisi pariatur numquam, facere dolore corrupti magnam neque. Impedit iusto nostrum adipisci.
-        </div>
+        </div> -->
       </div>
-      <div class="relative">
-        <the-marquee direction="left" @itemClick="getDetail" @panstart="cancelTimmer" @panmove="cancelTimmer" @continueTimmer="initTimmer" />
+      <div class="relative animate__animated animate__fadeInUp">
+        <the-marquee :list="bottomArr" direction="left" @itemClick="BottomgetDetail" @panstart="cancelTimmer" @panmove="cancelTimmer" @continueTimmer="initTimmer" />
       </div>
     </aside>
   </div>
@@ -25,37 +25,74 @@ export default {
   data () {
     return {
       timmer: null,
-      detailNum: null,
-      toggle: false
+      detailItem: null,
+      toggle: false,
+      list: [],
+      bottomArr: []
     }
   },
-  activated () {
-    // console.log('activated')
+  created () {
     this.initTimmer()
+    this.list = Object.freeze(this.initList(this.$store.state.PRODUCT_LIST))
   },
-  deactivated () {
+  destroyed () {
     clearTimeout(this.timmer)
-    // console.log('deactivated', this.timmer)
   },
+  // activated () {
+  //   // console.log('activated')
+  //   this.initTimmer()
+  // },
+  // deactivated () {
+  //   clearTimeout(this.timmer)
+  //   // console.log('deactivated', this.timmer)
+  // },
   methods: {
+    initList (array = [], size = 6) {
+      const length = array.length
+      if (!length || !size || size < 1) {
+        return []
+      }
+      let index = 0 // 用来表示切割元素的范围start
+      let resIndex = 0 // 用来递增表示输出数组的下标
+
+      // 根据length和size算出输出数组的长度，并且创建它。
+      const result = new Array(Math.ceil(length / size))
+
+      while (index < length) {
+      // 循环过程中设置result[0]和result[1]的值。该值根据array.slice切割得到。
+        result[resIndex++] = array.slice(index, (index += size))
+      }
+      return result
+    },
     initTimmer () {
       console.log('initTimmer', this.timmer)
       this.timmer && clearTimeout(this.timmer)
       this.timmer = setTimeout(() => {
-        // console.log('router.back()')
         this.$router.back()
       }, 5000)
     },
     cancelTimmer () {
       this.timmer && clearTimeout(this.timmer)
     },
-    getDetail (n) {
-      // console.log('getDetail', n)
-      this.detailNum = n
+    getDetail (id) {
+      console.log('getDetail', id)
+      for (let i = 0; i <= this.list.length; i++) {
+        const currentItem = this.list[i].find((item) => item.id === id)
+        if (currentItem) {
+          this.bottomArr = this.list[i]
+          this.detailItem = currentItem
+          break
+        }
+      }
       this.toggle = true
       clearTimeout(this.timmer)
     },
+    BottomgetDetail (id) {
+      this.detailItem = this.bottomArr.find(item => item.id === id)
+      clearTimeout(this.timmer)
+    },
     closeDetail () {
+      console.log('closeDetail')
       this.toggle = false
       this.initTimmer()
     }
@@ -68,11 +105,15 @@ export default {
   box-sizing: border-box;
   padding: 10px 0;
   overflow: hidden;
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
   section {
     box-sizing: border-box;
     height: percentage(100/900);
-    box-sizing: border-box;
-    padding: 0 0 30px;
+    padding: 15px 0;
   }
   aside {
     position: absolute;
@@ -83,11 +124,12 @@ export default {
     display: flex;
     background: rgba($color: #000000, $alpha: .8);
     > .details {
-      height: 50%;
+      max-height: 50%;
       width: 60%;
       background: #fff;
       box-shadow: 0 10px 20px rgba($color: #000000, $alpha: .6);
       border-radius: 10px;
+      padding: 5px;
       margin: 25% auto 0;
       overflow: auto;
       &::-webkit-scrollbar {
@@ -98,6 +140,7 @@ export default {
         img {
           width: 100%;
           border: none;
+          vertical-align: middle;
         }
       }
       .desc-box {
@@ -110,7 +153,7 @@ export default {
       left: 0;
       right: 0;
       width: 100%;
-      height: 80px;
+      height: 10vh;
     }
   }
 }

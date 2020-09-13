@@ -4,9 +4,7 @@
       enter-active-class="animate__animated animate__zoomIn animate__fadeIn"
       leave-active-class="animate__animated animate__zoomOut animate__fadeOut"
     >
-      <keep-alive include="About,Home,List">
-        <router-view class="router-container" />
-      </keep-alive>
+      <router-view class="router-container" />
     </transition>
   </div>
 </template>

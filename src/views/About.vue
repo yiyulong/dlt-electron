@@ -1,6 +1,6 @@
 <template>
   <div class="full-video-container" @click="jump">
-    <video-player />
+    <video-player :src="$store.state.VIDEO_FILE_URL" />
   </div>
 </template>
 <script>
@@ -13,8 +13,6 @@ export default {
   data () {
     return {
     }
-  },
-  activated () {
   },
   methods: {
     jump () {

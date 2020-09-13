@@ -1,13 +1,16 @@
 <template>
-  <div class="home-page">
-    <div class="video-container" :style="videoContainer_height">
-      <video-player />
+  <div class="home-page" :style="'background-image: url('+$store.state.KALEIDOSCOPE_BACKGROUD_PICTURE || ''+')'">
+    <div class="video-container">
+      <video-player class="video-content" :src="$store.state.INDEX_VIDEO_FILE_URL" />
     </div>
     <div class="pdt-container">
        <section class="cylinder-container">
-         <div class="row" v-for="m of 9" :key="m">
-           <div class="span" v-for="n of 12" :key="n">
-             <img :src="`./images/${n}.png`">
+         <div class="row" v-for="(itemArr, index) of list" :key="index">
+           <div class="span" v-for="(item, idx) of itemArr" :key="idx">
+             <img :src="item.picUrl">
+           </div>
+           <div class="span" v-for="(item, idx) of itemArr" :key="'repeat' + idx">
+             <img :src="item.picUrl">
            </div>
          </div>
        </section>
@@ -27,16 +30,32 @@ export default {
   },
   data () {
     return {
+      list: []
     }
   },
-  computed: {
-    videoContainer_height () {
-      return 'height:' + (document.documentElement.clientHeight * 16 / 9) + 'px'
-    }
+  created () {
+    this.list = Object.freeze(this.initList(this.$store.state.PRODUCT_LIST))
   },
   methods: {
+    initList (array = [], size = 6) {
+      const length = array.length
+      if (!length || !size || size < 1) {
+        return []
+      }
+      let index = 0 // 用来表示切割元素的范围start
+      let resIndex = 0 // 用来递增表示输出数组的下标
+
+      // 根据length和size算出输出数组的长度，并且创建它。
+      const result = new Array(Math.ceil(length / size))
+
+      while (index < length) {
+      // 循环过程中设置result[0]和result[1]的值。该值根据array.slice切割得到。
+        result[resIndex++] = array.slice(index, (index += size))
+      }
+      return result
+    },
     jump () {
-      this.$router.replace({ name: 'List' })
+      this.$store.state.SHOW_VIDEO ? this.$router.replace({ name: 'List' }) : this.$router.push({ name: 'List' })
     }
   }
 }
@@ -45,12 +64,32 @@ export default {
 .home-page {
   height: 100%;
   position: relative;;
-  // .video-container {
-  //   height: 29%;
-  // }
+  display: flex;
+  flex-flow: column nowrap;
+  background-size: cover;
+  background-repeat: no-repeat;
+  .video-container {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-top: 56.25%;
+    .video-content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+    }
+  }
   .pdt-container {
     overflow: hidden;
-    height: 71%;
+    flex: 1;
+    &::after {
+      content: '';
+      display: inline-block;
+      width: 0;
+      height: 100%;
+      vertical-align: middle;
+    }
     // perspective: 1000px;
     // transform-style: preserve-3d;
     @keyframes infiniteRotate {
@@ -62,14 +101,18 @@ export default {
       }
     }
     .cylinder-container {
-      margin: 60px 0;
+      // margin: 60px 0;
+      display: inline-block;
+      width: 100%;
       perspective: 1000px;
+      vertical-align: middle;
       // transform-style: preserve-3d;
       // animation: infiniteRotate 4s infinite both;
       .row {
         position: relative;
-        width: 40px;
-        height: 40px;
+        width: 10%;
+        height: 0;
+        padding-bottom: 10%;
         // perspective: 1000px;
         transform-style: preserve-3d;
         margin: 10px auto;
@@ -89,10 +132,10 @@ export default {
       $deg: 360 / $len;
       @for $i from 1 through $len {
         .row .span:nth-child(#{$i}) {
-          transform: rotateY(#{$i * $deg}deg) translateZ(150px);
+          transform: rotateY(#{$i * $deg}deg) translateZ(10rem);
         }
         .row:nth-child(even) .span:nth-child(#{$i}) {
-          transform: rotateY(#{$i * $deg + 15}deg) translateZ(150px);
+          transform: rotateY(#{$i * $deg + 15}deg) translateZ(10rem);
         }
       }
     }

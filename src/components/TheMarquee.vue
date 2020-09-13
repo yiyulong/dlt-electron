@@ -1,9 +1,9 @@
 <template>
   <div class="marquee-component">
     <!-- @click.stop="tragetEven" -->
-    <ul ref="marquee" class="marquee">
-      <li v-for="n of 6" :key="n">
-        <img :data-id="n" :src="`./images/${n}.png`" :class="randomNum === n && 'rotate'">
+    <ul ref="marquee" class="marquee" @touchend.prevent>
+      <li v-for="(item, index) of restlist" :key="index">
+        <img :data-id="item.id" :src="item.picUrl" :class="randomNum === index && 'rotate'">
       </li>
     </ul>
   </div>
@@ -14,6 +14,12 @@ import Hammer from 'hammerjs'
 export default {
   name: 'TheMarquee',
   props: {
+    list: {
+      type: Array,
+      default: function () {
+        return []
+      }
+    },
     direction: {
       type: String,
       default: 'left'
@@ -21,9 +27,11 @@ export default {
   },
   data () {
     return {
+      restlist: Object.freeze(this.list),
       marquee: null,
       hammer: null,
-      currentTranslateX: 0
+      currentTranslateX: 0,
+      randomNum: parseInt(Math.random() * 6)
     }
   },
   mounted () {
@@ -69,13 +77,15 @@ export default {
       })
     })
   },
+  // activated () {
+  //   this.marquee && this.marquee.play()
+  // },
+  // deactivated () {
+  //   this.marquee.stop()
+  // },
   destroyed () {
+    this.marquee.stop()
     this.hammer.off()
-  },
-  computed: {
-    randomNum () {
-      return parseInt(Math.random() * 6)
-    }
   },
   methods: {
     tragetEven (e) {
@@ -84,7 +94,7 @@ export default {
       if (tagName.toLowerCase() === 'img') {
         const { id } = e.target.dataset
         // console.log(id)
-        this.$emit('itemClick', id)
+        this.$emit('itemClick', JSON.parse(id))
       }
     }
   }
