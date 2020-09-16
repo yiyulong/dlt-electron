@@ -4,13 +4,13 @@ module.exports = {
     : '/',
   productionSourceMap: false,
   devServer: {
-    open: true,
-    proxy: {
-      '/': {
-        target: 'http://120.24.29.201:8080',
-        changeOrigin: true
-      }
-    }
+    open: true
+    // proxy: {
+    //   '/': {
+    //     target: 'http://120.24.29.201:8080',
+    //     changeOrigin: true
+    //   }
+    // }
     // proxy: process.env.NODE_ENV === 'production'
     //   ? {}
     //   : {

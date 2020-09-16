@@ -6,7 +6,8 @@ import './vant-load-on-demand'
 import axios from './api'
 import store from './store'
 
-import './assets/js/bodyStyle'
+import { setStyle } from './assets/js/bodyStyle'
+setStyle()
 
 Vue.use(animate)
 

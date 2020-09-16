@@ -9,8 +9,14 @@
   </div>
 </template>
 <script>
+import { setStyle } from './assets/js/bodyStyle'
 export default {
-  //
+  beforeMount () {
+    window.addEventListener('resize', setStyle, { passive: true })
+  },
+  beforeDestroy () {
+    window.removeEventListener('resize', setStyle, { passive: true })
+  }
 }
 </script>
 

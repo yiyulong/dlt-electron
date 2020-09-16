@@ -41,11 +41,12 @@ export default {
       if (this.loading) return
       try {
         this.loading = true
-        const loginRes = await this.$api.post('/mgp/doLogin', {
+        const loginRes = await this.$api.post('/mgp/api/doLogin', {
           userName: this.userName,
           password: this.password
         })
-        const productRes = await this.$api.get('/mgp/api/product/getProductInfoList')
+
+        const productRes = await this.$api.get('/mgp/api/product/getProductInfoList', { headers: { 'session-token': loginRes.data.sessionToken } })
 
         const resObj = { PRODUCT_LIST: productRes.resultList, ...loginRes.data }
         for (const key in resObj) {

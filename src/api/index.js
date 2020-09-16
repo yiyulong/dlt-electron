@@ -1,6 +1,7 @@
 import { Toast } from 'vant'
 import axios from 'axios'
 import qs from 'querystring'
+
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 const instance = axios.create({
   baseURL: process.env.VUE_APP_URL,
@@ -34,7 +35,7 @@ instance.interceptors.response.use(function (response) {
   // 1011 用户不可用
   // 对响应数据做点什么
   const { code, ...res } = response.data
-  if (code !== 0) {
+  if (code !== 0 && code !== 666) {
     const message = res.message || '请求失败'
     Toast({
       message,
