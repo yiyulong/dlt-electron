@@ -47,8 +47,9 @@ export default {
   //   // console.log('deactivated', this.timmer)
   // },
   methods: {
-    initList (array = [], size = 6) {
+    initList (array = [], size = 5) {
       const length = array.length
+      const maxLength = 8 * size
       if (!length || !size || size < 1) {
         return []
       }
@@ -56,16 +57,20 @@ export default {
       let resIndex = 0 // 用来递增表示输出数组的下标
 
       // 根据length和size算出输出数组的长度，并且创建它。
-      const result = new Array(Math.ceil(length / size))
+      const len = length <= maxLength ? length : maxLength
+      const result = new Array(Math.ceil(len / size))
 
-      while (index < length) {
+      while (index < len) {
       // 循环过程中设置result[0]和result[1]的值。该值根据array.slice切割得到。
         result[resIndex++] = array.slice(index, (index += size))
+      }
+      if (length > maxLength) {
+        result.push(array.slice(maxLength))
       }
       return result
     },
     initTimmer () {
-      console.log('initTimmer', this.timmer)
+      // console.log('initTimmer', this.timmer)
       this.timmer && clearTimeout(this.timmer)
       this.timmer = setTimeout(() => {
         this.$router.back()
@@ -75,7 +80,7 @@ export default {
       this.timmer && clearTimeout(this.timmer)
     },
     getDetail (id) {
-      console.log('getDetail', id)
+      // console.log('getDetail', id)
       for (let i = 0; i <= this.list.length; i++) {
         const currentItem = this.list[i].find((item) => item.id === id)
         if (currentItem) {
@@ -92,7 +97,7 @@ export default {
       clearTimeout(this.timmer)
     },
     closeDetail () {
-      console.log('closeDetail')
+      // console.log('closeDetail')
       this.toggle = false
       this.initTimmer()
     }
@@ -121,11 +126,9 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
-    display: flex;
     background: rgba($color: #000000, $alpha: .8);
     > .details {
-      max-height: 50%;
-      width: 60%;
+      width: 70%;
       background: #fff;
       box-shadow: 0 10px 20px rgba($color: #000000, $alpha: .6);
       border-radius: 10px;

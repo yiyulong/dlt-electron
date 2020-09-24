@@ -31,7 +31,7 @@ export default {
       marquee: null,
       hammer: null,
       currentTranslateX: 0,
-      randomNum: parseInt(Math.random() * 6)
+      randomNum: parseInt(Math.random() * 5)
     }
   },
   mounted () {
@@ -89,7 +89,7 @@ export default {
   },
   methods: {
     tragetEven (e) {
-      console.log(e, e.target.tagName)
+      // console.log(e, e.target.tagName)
       const tagName = e.target.tagName
       if (tagName.toLowerCase() === 'img') {
         const { id } = e.target.dataset
@@ -115,7 +115,7 @@ export default {
     li {
       display: inline-block;
       height: 100%;
-      margin-right: 30px;
+      margin-right: 4vh;
       img {
         height: 100%;
         -webkit-user-drag: none;

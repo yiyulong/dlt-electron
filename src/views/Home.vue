@@ -132,10 +132,10 @@ export default {
       $deg: 360 / $len;
       @for $i from 1 through $len {
         .row .span:nth-child(#{$i}) {
-          transform: rotateY(#{$i * $deg}deg) translateZ(10rem);
+          transform: rotateY(#{$i * $deg}deg) translateZ(12rem);
         }
         .row:nth-child(even) .span:nth-child(#{$i}) {
-          transform: rotateY(#{$i * $deg + 15}deg) translateZ(10rem);
+          transform: rotateY(#{$i * $deg + 15}deg) translateZ(12rem);
         }
       }
     }

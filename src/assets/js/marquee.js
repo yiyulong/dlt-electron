@@ -16,26 +16,28 @@ export default class Marquee {
   cloneItems () {
     const { clientWidth } = this.container.parentNode
 
-    const childrensDom = this.container.children
+    const childrensDom = [...this.container.children]
 
     const childrenStyle = getComputedStyle(childrensDom[0])
     const itemWidth = parseFloat(childrenStyle.width) + parseFloat(childrenStyle['margin-right'])
 
     const fitInNumber = Math.ceil(clientWidth / itemWidth)
-    // console.log(fitInNumber)
 
     this.container.querySelectorAll('.clone').forEach(clone => this.container.removeChild(clone))
 
     let totalClones = 0
-    childrensDom.forEach((target, index) => {
-      if (index < fitInNumber) {
-        // 深度克隆: 克隆节点以及所有子节点
-        const clone = target.cloneNode(true)
-        clone.classList.add('clone')
-        this.container.appendChild(clone)
-        ++totalClones
-      }
-    })
+
+    while ((totalClones / fitInNumber) < 1) {
+      childrensDom.forEach((target, index) => {
+        if (index < fitInNumber) {
+          // 深度克隆: 克隆节点以及所有子节点
+          const clone = target.cloneNode(true)
+          clone.classList.add('clone')
+          this.container.appendChild(clone)
+          ++totalClones
+        }
+      })
+    }
 
     this.clonesWidth = totalClones * itemWidth
 

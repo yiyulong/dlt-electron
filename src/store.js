@@ -1,5 +1,5 @@
 const parseValue = (key) => {
-  const value = sessionStorage.getItem(key)
+  const value = localStorage.getItem(key)
   if (typeof value !== 'undefined') {
     return JSON.parse(value)
   }
@@ -23,7 +23,7 @@ class Store {
 
   setValue (target, value) {
     this.data[target] = value
-    sessionStorage.setItem(target, JSON.stringify(value))
+    localStorage.setItem(target, JSON.stringify(value))
   }
 }
 

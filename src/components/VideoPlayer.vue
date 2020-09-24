@@ -4,9 +4,20 @@
     ref="videoPlayer"
     :options="playerOptions"
     :playsinline="true"
+    @canplay="onPlayerCanplay($event)"
   />
-  <!-- @statechanged="playerStateChanged($event)" -->
+  <!-- @play="onPlayerPlay($event)" -->
+  <!-- @pause="onPlayerPause($event)" -->
+  <!-- @ended="onPlayerEnded($event)" -->
+  <!-- @waiting="onPlayerWaiting($event)" -->
+  <!-- @playing="onPlayerPlaying($event)" -->
+  <!-- @loadeddata="onPlayerLoadeddata($event)" -->
   <!-- @timeupdate="onPlayerTimeupdate($event)" -->
+  <!-- @canplay="onPlayerCanplay($event)" -->
+  <!-- @canplaythrough="onPlayerCanplaythrough($event)" -->
+
+  <!-- @statechanged="playerStateChanged($event)" -->
+  <!-- @ready="playerReadied" -->
 </template>
 <script>
 import 'video.js/dist/video-js.css'
@@ -54,8 +65,8 @@ export default {
     }
   },
   mounted () {
-    console.log(this.player, this.player.paused())
-    this.player.paused() && this.player.play()
+    // console.log(this.player, this.player.paused())
+    // this.player.paused() && this.player.play()
   },
   // activated () {
   //   if (this.player) {
@@ -68,10 +79,18 @@ export default {
   // },
   methods: {
     // onPlayerTimeupdate (e) {
-    //   console.log(e)
-    // }
+    //   console.log('timeupdate', e)
+    // },
+    onPlayerCanplay (e) {
+      // console.log('onPlayerCanplay', e, this.player)
+      e.paused() && e.play()
+    }
     // playerStateChanged (e) {
-    //   console.log(e)
+    //   console.log('statechanged', e)
+    // },
+    // playerReadied (e) {
+    //   console.log('playerReadied', e, this.player)
+    //   e.paused() && e.play()
     // }
   }
 }

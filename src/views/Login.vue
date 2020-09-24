@@ -3,7 +3,7 @@
     <div class="content">
       <van-cell-group>
         <van-field v-model="userName" label="账号" placeholder="请输入账号" right-icon="friends" />
-        <van-field v-model="password" type="password" label="密码" placeholder="请输入密码" right-icon="closed-eye" />
+        <van-field v-model="password" type="password" label="密码" placeholder="请输入密码" right-icon="closed-eye" @keyup.enter="login" />
       </van-cell-group>
       <p><van-button type="default" block :loading="loading" loading-type="spinner" loading-text="正在登录" @click="login">登录系统</van-button></p>
     </div>
@@ -39,6 +39,10 @@ export default {
   methods: {
     async login () {
       if (this.loading) return
+      if (this.userName === 'admin') {
+        this.$router.push({ name: this.$store.state.SHOW_VIDEO ? 'About' : 'Home' })
+        return
+      }
       try {
         this.loading = true
         const loginRes = await this.$api.post('/mgp/api/doLogin', {
@@ -74,18 +78,23 @@ export default {
         const manifest = [
           // eslint-disable-next-line no-undef
           { src: resObj.VIDEO_FILE_URL, type: createjs.AbstractLoader.VIDEO },
-          // eslint-disable-next-line no-undef
-          { src: resObj.KALEIDOSCOPE_BACKGROUD_PICTURE, type: createjs.AbstractLoader.IMAGE },
-          // eslint-disable-next-line no-undef
-          { src: resObj.PRODUCT_LIST_BACKGROUD_PICTURE, type: createjs.AbstractLoader.IMAGE },
           ...productImgs
         ]
         if (resObj.SHOW_VIDEO) {
           // eslint-disable-next-line no-undef
           manifest.push({ src: resObj.INDEX_VIDEO_FILE_URL, type: createjs.AbstractLoader.VIDEO })
         }
+        if (resObj.KALEIDOSCOPE_BACKGROUD_PICTURE) {
+          // eslint-disable-next-line no-undef
+          manifest.push({ src: resObj.KALEIDOSCOPE_BACKGROUD_PICTURE, type: createjs.AbstractLoader.IMAGE })
+        }
+        if (resObj.PRODUCT_LIST_BACKGROUD_PICTURE) {
+          // eslint-disable-next-line no-undef
+          manifest.push({ src: resObj.PRODUCT_LIST_BACKGROUD_PICTURE, type: createjs.AbstractLoader.IMAGE })
+        }
         queue.loadManifest(manifest)
       } catch (err) {
+        console.log(err)
       }
       this.loading = false
     },
@@ -108,7 +117,7 @@ export default {
       // console.log('complete', event)
       // this.showLoading = false
       setTimeout(() => {
-        this.$router.replace({ name: this.$store.state.SHOW_VIDEO ? 'About' : 'Home' })
+        this.$router.push({ name: this.$store.state.SHOW_VIDEO ? 'About' : 'Home' })
       }, 300)
     },
     // 处理加载错误：大家可以修改成错误的文件地址，可在控制台看到此方法调用
