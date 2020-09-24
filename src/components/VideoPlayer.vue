@@ -5,6 +5,7 @@
     :options="playerOptions"
     :playsinline="true"
     @canplay="onPlayerCanplay($event)"
+    @ready="playerReadied"
   />
   <!-- @play="onPlayerPlay($event)" -->
   <!-- @pause="onPlayerPause($event)" -->
@@ -83,15 +84,17 @@ export default {
     // },
     onPlayerCanplay (e) {
       // console.log('onPlayerCanplay', e, this.player)
-      e.paused() && e.play()
-    }
+      // e.paused() && e.play()
+      // e.paused() && e.volume(2)
+    },
     // playerStateChanged (e) {
     //   console.log('statechanged', e)
     // },
-    // playerReadied (e) {
-    //   console.log('playerReadied', e, this.player)
-    //   e.paused() && e.play()
-    // }
+    playerReadied (e) {
+      // console.log('playerReadied', e, this.player)
+      e.paused() && e.play()
+      e.volume(0.5)
+    }
   }
 }
 </script>

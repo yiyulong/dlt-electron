@@ -106,6 +106,7 @@ export default {
 </script>
 <style lang="scss">
 .list-page {
+  cursor: pointer;
   height: 100vh;
   box-sizing: border-box;
   padding: 10px 0;

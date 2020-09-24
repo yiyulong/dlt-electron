@@ -12,6 +12,7 @@
         <van-circle v-model="currentProgress" :text="loadText" size="120" :color="{ '0%': '#3fecff', '100%': '#6149f6' }" />
       </div>
     </div>
+    <!-- <div class="setting-btn" @click="showSetting = !showSetting"><van-icon name="setting-o" /></div> -->
   </div>
 </template>
 
@@ -25,7 +26,8 @@ export default {
       password: '',
       loading: false,
       showLoading: false,
-      currentProgress: 0
+      currentProgress: 0,
+      showSetting: false // 是否显示设置面板
     }
   },
   computed: {
@@ -158,6 +160,13 @@ export default {
       overflow: hidden;
       box-sizing: border-box;
     }
+  }
+  .setting-btn {
+    cursor: pointer;
+    position: absolute;
+    bottom: 5%;
+    left: 5%;
+    padding: 10px;
   }
 }
 </style>

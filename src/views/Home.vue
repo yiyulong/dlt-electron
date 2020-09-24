@@ -62,6 +62,7 @@ export default {
 </script>
 <style lang="scss">
 .home-page {
+  cursor: none;
   height: 100%;
   position: relative;;
   display: flex;
@@ -115,7 +116,7 @@ export default {
         padding-bottom: 10%;
         // perspective: 1000px;
         transform-style: preserve-3d;
-        margin: 10px auto;
+        margin: 1vh auto;
         animation: infiniteRotate 12s linear infinite both;
       }
       .span {
@@ -132,10 +133,10 @@ export default {
       $deg: 360 / $len;
       @for $i from 1 through $len {
         .row .span:nth-child(#{$i}) {
-          transform: rotateY(#{$i * $deg}deg) translateZ(12rem);
+          transform: rotateY(#{$i * $deg}deg) translateZ(22vh);
         }
         .row:nth-child(even) .span:nth-child(#{$i}) {
-          transform: rotateY(#{$i * $deg + 15}deg) translateZ(12rem);
+          transform: rotateY(#{$i * $deg + 15}deg) translateZ(22vh);
         }
       }
     }

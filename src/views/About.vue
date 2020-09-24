@@ -23,6 +23,7 @@ export default {
 </script>
 <style lang="scss">
 .full-video-container {
+  cursor: none;
   position: absolute;
   top: 0;
   left: 0;
