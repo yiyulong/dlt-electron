@@ -2,7 +2,14 @@
   <!-- @click="initTimmer" -->
   <div class="list-page" :style="'background-image: url('+$store.state.PRODUCT_LIST_BACKGROUD_PICTURE || ''+')'">
     <section v-for="(itemArr, index) of list" :key="index">
-      <the-marquee :list="itemArr" :direction="index%2 ? 'left' : 'right'" @itemClick="getDetail" @panstart="cancelTimmer" @panmove="cancelTimmer" @continueTimmer="initTimmer" />
+      <the-marquee
+        :list="itemArr"
+        :direction="index%2 ? 'left' : 'right'"
+        @itemClick="tapDetail"
+        @panstart="cancelTimmer"
+        @panmove="cancelTimmer"
+        @continueTimmer="initTimmer"
+      />
     </section>
     <aside v-if="toggle" @click.self="closeDetail">
       <div class="details animate__animated animate__zoomIn">
@@ -12,7 +19,14 @@
         </div> -->
       </div>
       <div class="relative animate__animated animate__fadeInUp">
-        <the-marquee :list="bottomArr" direction="left" @itemClick="BottomgetDetail" @panstart="cancelTimmer" @panmove="cancelTimmer" @continueTimmer="initTimmer" />
+        <the-marquee
+          :list="flatList"
+          direction="left"
+          @itemClick="tapDetail"
+          @panstart="cancelTimmer"
+          @panmove="cancelTimmer"
+          @continueTimmer="initTimmer"
+        />
       </div>
     </aside>
   </div>
@@ -28,12 +42,14 @@ export default {
       detailItem: null,
       toggle: false,
       list: [],
-      bottomArr: []
+      bottomArr: [],
+      flatList: []
     }
   },
   created () {
     this.initTimmer()
-    this.list = Object.freeze(this.initList(this.$store.state.PRODUCT_LIST))
+    this.list = Object.freeze(this.$store.state.PRODUCT_LIST)
+    this.flatList = Object.freeze(this.initFlatList(this.$store.state.PRODUCT_LIST))
   },
   destroyed () {
     clearTimeout(this.timmer)
@@ -47,37 +63,47 @@ export default {
   //   // console.log('deactivated', this.timmer)
   // },
   methods: {
-    initList (array = [], size = 5) {
-      const length = array.length
-      const maxLength = 8 * size
-      if (!length || !size || size < 1) {
-        return []
-      }
-      let index = 0 // 用来表示切割元素的范围start
-      let resIndex = 0 // 用来递增表示输出数组的下标
-
-      // 根据length和size算出输出数组的长度，并且创建它。
-      const len = length <= maxLength ? length : maxLength
-      const result = new Array(Math.ceil(len / size))
-
-      while (index < len) {
-      // 循环过程中设置result[0]和result[1]的值。该值根据array.slice切割得到。
-        result[resIndex++] = array.slice(index, (index += size))
-      }
-      if (length > maxLength) {
-        result.push(array.slice(maxLength))
-      }
-      return result
+    initFlatList (array = []) {
+      return array.flat()
     },
+    // initList (array = [], size = 5) {
+    //   const length = array.length
+    //   const maxLength = 8 * size
+    //   if (!length || !size || size < 1) {
+    //     return []
+    //   }
+    //   let index = 0 // 用来表示切割元素的范围start
+    //   let resIndex = 0 // 用来递增表示输出数组的下标
+
+    //   // 根据length和size算出输出数组的长度，并且创建它。
+    //   const len = length <= maxLength ? length : maxLength
+    //   const result = new Array(Math.ceil(len / size))
+
+    //   while (index < len) {
+    //   // 循环过程中设置result[0]和result[1]的值。该值根据array.slice切割得到。
+    //     result[resIndex++] = array.slice(index, (index += size))
+    //   }
+    //   if (length > maxLength) {
+    //     result.push(array.slice(maxLength))
+    //   }
+    //   return result
+    // },
     initTimmer () {
       // console.log('initTimmer', this.timmer)
-      this.timmer && clearTimeout(this.timmer)
+      // this.timmer && clearTimeout(this.timmer)
+      clearTimeout(this.timmer)
       this.timmer = setTimeout(() => {
         this.$router.back()
-      }, 5000)
+      }, 1000 * (this.$store.state.TIME_DURATION || 30))
     },
     cancelTimmer () {
-      this.timmer && clearTimeout(this.timmer)
+      // this.timmer && clearTimeout(this.timmer)
+      clearTimeout(this.timmer)
+    },
+    tapDetail (id) {
+      this.detailItem = this.flatList.find(item => item.id === id)
+      this.toggle = true
+      this.initTimmer()
     },
     getDetail (id) {
       // console.log('getDetail', id)
@@ -90,11 +116,13 @@ export default {
         }
       }
       this.toggle = true
-      clearTimeout(this.timmer)
+      // clearTimeout(this.timmer)
+      this.initTimmer()
     },
     BottomgetDetail (id) {
       this.detailItem = this.bottomArr.find(item => item.id === id)
-      clearTimeout(this.timmer)
+      // clearTimeout(this.timmer)
+      this.initTimmer()
     },
     closeDetail () {
       // console.log('closeDetail')
@@ -109,7 +137,7 @@ export default {
   cursor: pointer;
   height: 100vh;
   box-sizing: border-box;
-  padding: 10px 0;
+  padding: 2vh 0;
   overflow: hidden;
   background-size: cover;
   background-repeat: no-repeat;
@@ -119,7 +147,7 @@ export default {
   section {
     box-sizing: border-box;
     height: percentage(100/900);
-    padding: 15px 0;
+    padding: 2vh 0;
   }
   aside {
     position: absolute;
@@ -157,7 +185,9 @@ export default {
       left: 0;
       right: 0;
       width: 100%;
-      height: 10vh;
+      height: percentage(100/900);
+      padding: 2vh 0;
+      box-sizing: border-box;
     }
   }
 }

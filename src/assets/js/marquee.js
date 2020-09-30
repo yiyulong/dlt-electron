@@ -1,7 +1,7 @@
 export default class Marquee {
   constructor (el, direction) {
     this.container = el
-    this.speed = direction === 'left' ? -1 : 1
+    this.speed = direction === 'left' ? -2 : 2
 
     this.cancel = false
 

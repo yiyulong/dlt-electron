@@ -69,13 +69,16 @@ export default {
 
         const productImgs = []
         for (let i = 0; i < resObj.PRODUCT_LIST.length; i++) {
-          const currentItem = resObj.PRODUCT_LIST[i]
-          productImgs.push(...[
-            // eslint-disable-next-line no-undef
-            { src: currentItem.picUrl, type: createjs.AbstractLoader.IMAGE },
-            // eslint-disable-next-line no-undef
-            { src: currentItem.detailPicUrl, type: createjs.AbstractLoader.IMAGE }
-          ])
+          const currentArr = resObj.PRODUCT_LIST[i]
+          for (let j = 0; j < currentArr.length; j++) {
+            const currentItem = currentArr[j]
+            productImgs.push(...[
+              // eslint-disable-next-line no-undef
+              { src: currentItem.picUrl, type: createjs.AbstractLoader.IMAGE },
+              // eslint-disable-next-line no-undef
+              { src: currentItem.detailPicUrl, type: createjs.AbstractLoader.IMAGE }
+            ])
+          }
         }
         const manifest = [
           // eslint-disable-next-line no-undef

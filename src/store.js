@@ -13,7 +13,8 @@ class Store {
       INDEX_VIDEO_FILE_URL: parseValue('INDEX_VIDEO_FILE_URL') ?? '',
       KALEIDOSCOPE_BACKGROUD_PICTURE: parseValue('KALEIDOSCOPE_BACKGROUD_PICTURE') ?? '',
       PRODUCT_LIST_BACKGROUD_PICTURE: parseValue('PRODUCT_LIST_BACKGROUD_PICTURE') ?? '',
-      PRODUCT_LIST: parseValue('PRODUCT_LIST') ?? []
+      PRODUCT_LIST: parseValue('PRODUCT_LIST') ?? [],
+      TIME_DURATION: parseValue('TIME_DURATION') ?? 30
     }
   }
 

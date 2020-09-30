@@ -112,14 +112,29 @@ export default {
     padding: 0;
     white-space: nowrap;
     position: relative;
+    box-sizing: border-box;
     li {
       display: inline-block;
       height: 100%;
-      margin-right: 4vh;
+      // margin-right: 5vw;
+      box-sizing: border-box;
+      width: 20vw;
       img {
         height: 100%;
         -webkit-user-drag: none;
+        -moz-user-drag: none;
+        -ms-user-drag: none;
+        user-drag: none;
+        -webkit-touch-callout: none;
         -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        vertical-align: middle;
+        box-sizing: border-box;
+        border: 2px solid rgba($color: #e8c664, $alpha: .6);
+        // border: 1px solid hsla(45°, 74.2%, 65.1%, .6);
         &.rotate {
           animation: rotate 4s infinite;
         }

@@ -6,16 +6,13 @@
     <div class="pdt-container">
        <section class="cylinder-container">
          <div class="row" v-for="(itemArr, index) of list" :key="index">
-           <div class="span" v-for="(item, idx) of itemArr" :key="idx">
-             <img :src="item.picUrl">
-           </div>
-           <div class="span" v-for="(item, idx) of itemArr" :key="'repeat' + idx">
+           <div class="span" v-for="(item, idx) of initRow(itemArr)" :key="idx">
              <img :src="item.picUrl">
            </div>
          </div>
        </section>
     </div>
-    <div class="mask-container" @click="jump">
+    <div class="mask-container" @click.stop="jump">
       <i class="tip-touch animate__animated animate__infinite animate__heartBeat animate__slow" />
     </div>
   </div>
@@ -30,32 +27,54 @@ export default {
   },
   data () {
     return {
-      list: []
+      list: [],
+      timmer: null
     }
   },
   created () {
-    this.list = Object.freeze(this.initList(this.$store.state.PRODUCT_LIST))
+    this.initTimmer()
+    this.list = Object.freeze(this.$store.state.PRODUCT_LIST)
+  },
+  destroyed () {
+    clearTimeout(this.timmer)
   },
   methods: {
-    initList (array = [], size = 6) {
-      const length = array.length
-      if (!length || !size || size < 1) {
-        return []
+    initRow (arr = []) {
+      let list = []
+      if (arr.length < 12) {
+        while (list.length < 12) {
+          list.push(...arr)
+        }
+      } else {
+        list = arr
       }
-      let index = 0 // 用来表示切割元素的范围start
-      let resIndex = 0 // 用来递增表示输出数组的下标
-
-      // 根据length和size算出输出数组的长度，并且创建它。
-      const result = new Array(Math.ceil(length / size))
-
-      while (index < length) {
-      // 循环过程中设置result[0]和result[1]的值。该值根据array.slice切割得到。
-        result[resIndex++] = array.slice(index, (index += size))
-      }
-      return result
+      return list.slice(0, 12)
     },
+    // initList (array = [], size = 6) {
+    //   const length = array.length
+    //   if (!length || !size || size < 1) {
+    //     return []
+    //   }
+    //   let index = 0 // 用来表示切割元素的范围start
+    //   let resIndex = 0 // 用来递增表示输出数组的下标
+
+    //   // 根据length和size算出输出数组的长度，并且创建它。
+    //   const result = new Array(Math.ceil(length / size))
+
+    //   while (index < length) {
+    //   // 循环过程中设置result[0]和result[1]的值。该值根据array.slice切割得到。
+    //     result[resIndex++] = array.slice(index, (index += size))
+    //   }
+    //   return result
+    // },
     jump () {
       this.$store.state.SHOW_VIDEO ? this.$router.replace({ name: 'List' }) : this.$router.push({ name: 'List' })
+    },
+    initTimmer () {
+      clearTimeout(this.timmer)
+      this.timmer = setTimeout(() => {
+        this.$router.back()
+      }, 1000 * (this.$store.state.TIME_DURATION || 30))
     }
   }
 }
@@ -105,7 +124,7 @@ export default {
       // margin: 60px 0;
       display: inline-block;
       width: 100%;
-      perspective: 1000px;
+      perspective: 200vw;
       vertical-align: middle;
       // transform-style: preserve-3d;
       // animation: infiniteRotate 4s infinite both;
@@ -117,44 +136,48 @@ export default {
         // perspective: 1000px;
         transform-style: preserve-3d;
         margin: 1vh auto;
-        animation: infiniteRotate 12s linear infinite both;
+        animation: infiniteRotate 36s linear infinite both;
       }
       .span {
         position: absolute;
         width: 100%;
         height: 100%;
+        // backface-visibility: hidden;
         img {
           width: 100%;
           height: 100%;
           object-fit: cover;
+          border: 1px solid rgba($color: #e8c664, $alpha: .6);
         }
       }
       $len: 12;
       $deg: 360 / $len;
       @for $i from 1 through $len {
         .row .span:nth-child(#{$i}) {
-          transform: rotateY(#{$i * $deg}deg) translateZ(22vh);
+          transform: rotateY(#{$i * $deg}deg) translateZ(32vw);
         }
         .row:nth-child(even) .span:nth-child(#{$i}) {
-          transform: rotateY(#{$i * $deg + 15}deg) translateZ(22vh);
+          transform: rotateY(#{$i * $deg + 15}deg) translateZ(32vw);
         }
       }
     }
   }
   .mask-container {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
-    justify-content: center;
     z-index: 1;
+    overflow: hidden;
     .tip-touch {
-      width: 60px;
-      height: 60px;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 30vh;
+      width: 15vw;
+      height: 15vw;
+      margin: auto;
       background: url('../assets/images/Touch.svg') no-repeat center;
       background-size: contain;
     }
