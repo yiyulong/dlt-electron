@@ -32,7 +32,7 @@ export default {
     }
   },
   created () {
-    this.initTimmer()
+    this.$store.state.SHOW_VIDEO && this.initTimmer()
     this.list = Object.freeze(this.$store.state.PRODUCT_LIST)
   },
   destroyed () {

@@ -47,12 +47,12 @@ export default {
       }
       try {
         this.loading = true
-        const loginRes = await this.$api.post('/mgp/api/doLogin', {
+        const loginRes = await this.$api.post('/mln/api/doLogin', {
           userName: this.userName,
           password: this.password
         })
 
-        const productRes = await this.$api.get('/mgp/api/product/getProductInfoList', { headers: { 'session-token': loginRes.data.sessionToken } })
+        const productRes = await this.$api.get('/mln/api/product/getProductInfoList', { headers: { 'session-token': loginRes.data.sessionToken } })
 
         const resObj = { PRODUCT_LIST: productRes.resultList, ...loginRes.data }
         for (const key in resObj) {
@@ -137,6 +137,10 @@ export default {
 .login-page {
   background: #f3f3f3;
   text-align: center;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
   .content {
     display: inline-block;
     margin-top: 20%;
